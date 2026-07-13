@@ -31,7 +31,7 @@ const FEATURES = [
 
 const INTEGRATIONS = ["PetPooja", "Razorpay", "WhatsApp", "GST Ready"];
 
-const SVS_STATS = [
+const CUSTOMER_STATS = [
   { value: "5L+", label: "monthly order value" },
   { value: "3", label: "stores live" },
   { value: "MP", label: "Madhya Pradesh" },
@@ -203,7 +203,7 @@ export default function KioskPage() {
           </div>
         </section>
 
-        {/* SVS Food testimonial, portrait video */}
+        {/* Customer story, portrait video */}
         <section className="section-grid-lines kiosk-section section-shell">
           <div className="kiosk-testimonial-grid">
             <div>
@@ -214,23 +214,23 @@ export default function KioskPage() {
                 <span style={{ fontWeight: 500, color: "#111" }}>who run at scale.</span>
               </h2>
               <blockquote className="kiosk-quote">
-                <strong>SVS Food Company</strong> in Madhya Pradesh runs Entropia Kiosk across their outlets.
+                <strong>Kiosk client</strong> in Madhya Pradesh runs Entropia Kiosk across their outlets.
                 Customers order directly from the screen, orders hit PetPooja instantly, and the team
                 tracks everything from one dashboard.
               </blockquote>
               <div className="kiosk-stat-row">
-                {SVS_STATS.map((stat) => (
+                {CUSTOMER_STATS.map((stat) => (
                   <div key={stat.label} className="kiosk-stat">
                     <span className="kiosk-stat-value">{stat.value}</span>
                     <span className="kiosk-stat-label">{stat.label}</span>
                   </div>
                 ))}
               </div>
-              <p className="kiosk-quote-meta">SVS Food Company · Madhya Pradesh</p>
+              <p className="kiosk-quote-meta">Kiosk client · Madhya Pradesh</p>
             </div>
             <KioskAutoplayVideo
               src="/kiosk/recordedappvideo.mp4"
-              label="SVS Food kiosk in action"
+              label="Kiosk in action"
               poster="/kiosk/ss-app1.png"
               aspect="portrait"
             />

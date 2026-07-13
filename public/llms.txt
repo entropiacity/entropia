@@ -76,7 +76,7 @@ Yes. Entropia supports multi-location kiosk and HRMS operations from a single da
 
 ## Customer proof points mentioned on site
 
-- SVS Food Company uses Entropia Kiosk across outlets in Madhya Pradesh
+- Kiosk client uses Entropia Kiosk across outlets in Madhya Pradesh
 - Nandhishwar Polymers Private Limited uses Entropia HRMS across 8 branches and 200+ employees
 - Testimonials cite faster kitchen sync, lower software cost, faster payroll runs, and better multi-branch reliability
 

@@ -1,7 +1,7 @@
 "use client";
 
 const CLIENTS = [
-  { name: "SVSFood", icon: <FoodIcon /> },
+  { name: "Kiosk client", icon: <FoodIcon /> },
   { name: "Nandhishwar Polymers", icon: <FactoryIcon /> },
   { name: "Spice Garden Restaurants", icon: <FoodIcon /> },
   { name: "Urban Diner Chain", icon: <StoreIcon /> },

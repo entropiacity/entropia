@@ -198,7 +198,6 @@ export const KIOSK_METADATA = createPageMetadata({
     "QSR kiosk software",
     "kiosk UPI payments",
     "kitchen display integration",
-    "SVS Food Company kiosk",
   ],
   ogImage: "/kiosk.png",
   ogImageAlt: "Entropia self-ordering restaurant kiosk integrated with PetPooja and Razorpay",
