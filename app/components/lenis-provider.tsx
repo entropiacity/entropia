@@ -1,9 +1,18 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { ReactLenis } from "lenis/react";
 import "lenis/dist/lenis.css";
 
 export function LenisProvider({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  // Agentic/home landing uses native sticky stacking — Lenis makes scroll feel stuck there.
+  const useLenis = pathname !== "/";
+
+  if (!useLenis) {
+    return <>{children}</>;
+  }
+
   return (
     <ReactLenis
       root

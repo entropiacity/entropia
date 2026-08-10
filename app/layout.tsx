@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/react";
+import { IBM_Plex_Sans, Courier_Prime } from "next/font/google";
 import { JsonLd } from "./components/json-ld";
 import "./globals.css";
 import { LenisProvider } from "./components/lenis-provider";
@@ -11,6 +12,18 @@ import {
   SITE_NAME,
   assetUrl,
 } from "./lib/seo";
+
+const ibmPlexSans = IBM_Plex_Sans({
+  weight: ["300", "400", "500", "600"],
+  subsets: ["latin"],
+  variable: "--font-ibm-plex-sans",
+});
+
+const courierPrime = Courier_Prime({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-pixel",
+});
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -78,7 +91,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en-IN">
+    <html lang="en-IN" className={`${ibmPlexSans.variable} ${courierPrime.variable}`}>
       <head>
         <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-readable site summary" />
         <link rel="author" href={assetUrl("/llms.txt")} />
