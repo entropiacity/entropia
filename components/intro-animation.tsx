@@ -50,11 +50,11 @@ export function IntroAnimation({ onDone }: { onDone: () => void }) {
         style={{
           bottom: curtainUp ? "100%" : "0%",
           transition: curtainUp ? "bottom 1.3s cubic-bezier(0.76, 0, 0.24, 1)" : "none",
-          background: "#f5f4f1",
+          background: "#ffffff",
         }}
       />
 
-      {/* AGENTIC letters */}
+      {/* ENTROPIA letters */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="flex" style={{ gap: "0.06em" }}>
           {LETTERS.map((letter, i) => {

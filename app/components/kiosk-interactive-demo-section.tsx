@@ -21,7 +21,7 @@ export function KioskInteractiveDemoSection() {
             ))}
           </ul>
         </div>
-        <KioskWebDemo className="kd-device-wrap--wide" />
+        <KioskWebDemo className="kd-device-wrap--wide" autoFocusOnView />
       </div>
     </section>
   );

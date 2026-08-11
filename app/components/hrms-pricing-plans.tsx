@@ -6,7 +6,7 @@ const ONETIME_FEATURES = [
   "Auto attendance marking",
   "Custom salary formulas",
   "One-click payroll from check-ins",
-  "EPF, ESIC & TDS automated",
+  "Tax packs for 45+ countries",
   "Multi-branch dashboard",
 ];
 
@@ -45,7 +45,7 @@ export function HrmsPricingPlans({ compact = false }: { compact?: boolean }) {
               <span className="plan-popular-badge">🔥 Popular</span>
             </div>
             <div className="plan-card-price-row">
-              <span className="plan-card-price">₹34,999</span>
+              <span className="plan-card-price">$499</span>
             </div>
             <p className="plan-card-billing">One-time license fee</p>
             <p className="plan-card-desc">Full HRMS with face attendance and payroll. Pay once, own it.</p>

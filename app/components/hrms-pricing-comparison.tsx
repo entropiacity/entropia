@@ -74,7 +74,7 @@ export function HrmsPricingComparison() {
           </h2>
         </div>
         <Link href={BOOK_DEMO_URL} className="hrms-compare-cta">
-          Get Entropia · ₹34,999
+          Get Entropia · $499
         </Link>
       </div>
 
@@ -216,7 +216,7 @@ export function HrmsPricingComparison() {
       </div>
 
       <p className="hrms-compare-source">
-        Verified June 2026 · Entropia ₹34,999 one-time · 5-year savings =
+        Verified June 2026 · Entropia $499 one-time · 5-year savings =
         competitor total − lifetime license
       </p>
     </div>

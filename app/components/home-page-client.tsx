@@ -356,7 +356,7 @@ export function HomePageClient() {
           </span>
         </div>
         <a
-          href="mailto:hello@entropia.in"
+          href="mailto:hello@entropiacity.com"
           aria-label="Email"
           style={{
             width: 38, height: 38,

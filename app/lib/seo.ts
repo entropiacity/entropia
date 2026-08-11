@@ -4,7 +4,7 @@ import { SITE_BASE_URL } from "./links";
 export const SITE_NAME = "Entropia";
 export const SITE_LEGAL_NAME = "Entropia Technologies Pvt. Ltd.";
 export const SITE_TAGLINE = "Software built to replace the giants";
-export const SITE_EMAIL = "hello@entropia.in";
+export const SITE_EMAIL = "hello@entropiacity.com";
 export const SITE_LOCALE = "en_IN";
 export const SITE_COUNTRY = "IN";
 

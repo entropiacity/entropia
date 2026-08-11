@@ -102,10 +102,10 @@ export function Footer() {
               Email
             </p>
             <a
-              href="mailto:hello@entropia.in"
+              href="mailto:hello@entropiacity.com"
               style={{ fontSize: 16, fontWeight: 500, color: "#fff", textDecoration: "none", letterSpacing: -0.3 }}
             >
-              hello@entropia.in
+              hello@entropiacity.com
             </a>
           </div>
 

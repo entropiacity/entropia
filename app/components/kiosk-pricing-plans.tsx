@@ -45,7 +45,7 @@ export function KioskPricingPlans({ compact = false }: { compact?: boolean }) {
               <span className="plan-popular-badge">🔥 Popular</span>
             </div>
             <div className="plan-card-price-row">
-              <span className="plan-card-price">₹99,999</span>
+              <span className="plan-card-price">$999</span>
             </div>
             <p className="plan-card-billing">One-time license fee</p>
             <p className="plan-card-desc">Full kiosk product for your restaurant or chain. Pay once, own it.</p>

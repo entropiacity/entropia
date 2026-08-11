@@ -11,6 +11,7 @@ const FOCUS_TRANSITION_MS = 580;
 
 type KioskWebDemoProps = {
   className?: string;
+  autoFocusOnView?: boolean;
 };
 
 type Rect = { left: number; top: number; width: number; height: number };
@@ -36,7 +37,7 @@ function scrollbarWidth(): number {
 /**
  * Mini web kiosk, portrait 9:16 frame, dummy menu & checkout (no backend).
  */
-export function KioskWebDemo({ className = '' }: KioskWebDemoProps) {
+export function KioskWebDemo({ className = '', autoFocusOnView = false }: KioskWebDemoProps) {
   const [focused, setFocused] = useState(false);
   const [placeholderHeight, setPlaceholderHeight] = useState(0);
   const [mounted, setMounted] = useState(false);
@@ -48,6 +49,7 @@ export function KioskWebDemo({ className = '' }: KioskWebDemoProps) {
   const startRectRef = useRef<Rect | null>(null);
   const pendingOrderNowRef = useRef(false);
   const animatingRef = useRef(false);
+  const autoFocusedRef = useRef(false);
 
   useEffect(() => setMounted(true), []);
 
@@ -88,6 +90,25 @@ export function KioskWebDemo({ className = '' }: KioskWebDemoProps) {
     },
     [focused],
   );
+
+  useEffect(() => {
+    if (!autoFocusOnView) return;
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (autoFocusedRef.current || !entry.isIntersecting) return;
+        autoFocusedRef.current = true;
+        obs.disconnect();
+        window.setTimeout(() => enterFocus(true), 350);
+      },
+      { threshold: 0.4, rootMargin: '0px 0px -12% 0px' },
+    );
+
+    obs.observe(wrap);
+    return () => obs.disconnect();
+  }, [autoFocusOnView, enterFocus]);
 
   useLayoutEffect(() => {
     if (!focused) return;
@@ -213,7 +234,7 @@ export function KioskWebDemo({ className = '' }: KioskWebDemoProps) {
             </KioskDemoProvider>
           </div>
           {!focused ? (
-            <p className="kd-device-caption">Interactive demo · portrait kiosk · 9:16</p>
+            <p className="kd-device-caption">Interactive demo</p>
           ) : null}
         </div>
       </div>

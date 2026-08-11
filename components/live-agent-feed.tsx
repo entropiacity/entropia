@@ -3,29 +3,29 @@
 import { useEffect, useState, useRef } from "react"
 
 const AGENT_NAMES = [
-  "kiosk-indiranagar", "kiosk-koramangala", "hrms-hq", "payroll-engine",
-  "face-scan-01", "petpooja-sync", "razorpay-upi", "branch-mg-road",
-  "attendance-live", "tds-filer",
+  "kiosk-downtown", "kiosk-midtown", "hrms-hq", "payroll-engine",
+  "face-scan-01", "pos-sync", "payments-live", "branch-west",
+  "attendance-live", "tax-filer",
 ]
 
 const TASKS = [
-  "Syncing PetPooja menu — 142 items",
-  "UPI payment confirmed · ₹480",
+  "Syncing POS menu - 142 items",
+  "Card payment confirmed · $48",
   "Face scan check-in · Priya S.",
   "Kitchen ticket sent · Order #1842",
   "Running payroll formulas · Branch 3",
-  "EPF contribution batch filed",
-  "ESIC records updated · 28 staff",
+  "US tax withholdings applied",
+  "UK PAYE batch updated · 28 staff",
   "Peak-hour AOV spike detected",
   "Multi-kiosk menu push · 4 terminals",
   "Overtime auto-calculated · Night shift",
-  "TDS quarterly draft ready",
+  "GST / VAT draft ready",
   "Branch attendance 97% live",
-  "Razorpay settlement reconciled",
-  "Upsell screen converted · +₹90",
+  "Settlement reconciled",
+  "Upsell screen converted · +$9",
 ]
 
-const REGIONS = ["BLR-01", "BLR-02", "HYD-01", "DEL-01", "MUM-01"]
+const REGIONS = ["US-EAST", "EU-WEST", "APAC", "UK-01", "UAE-01"]
 const STATUSES = [
   { label: "live",     color: "#4ade80" },
   { label: "live",     color: "#4ade80" },
@@ -86,12 +86,12 @@ function ProgressBar({ initial }: { initial: number }) {
 }
 
 const SEED_ROWS: AgentRow[] = [
-  { id: "A1B2C3", name: "kiosk-indiranagar", task: "UPI payment confirmed · ₹480",        region: "BLR-01", status: STATUSES[0], progress: 42, elapsed: "0m 12s", key: 0 },
-  { id: "D4E5F6", name: "petpooja-sync",     task: "Syncing PetPooja menu — 142 items",    region: "BLR-02", status: STATUSES[0], progress: 67, elapsed: "1m 48s", key: 1 },
-  { id: "G7H8I9", name: "face-scan-01",      task: "Face scan check-in · Priya S.",        region: "HYD-01", status: STATUSES[3], progress: 18, elapsed: "0m 05s", key: 2 },
-  { id: "J0K1L2", name: "payroll-engine",    task: "Running payroll formulas · Branch 3",  region: "DEL-01", status: STATUSES[0], progress: 55, elapsed: "5m 30s", key: 3 },
-  { id: "M3N4O5", name: "hrms-hq",           task: "EPF contribution batch filed",         region: "MUM-01", status: STATUSES[0], progress: 80, elapsed: "2m 22s", key: 4 },
-  { id: "P6Q7R8", name: "razorpay-upi",      task: "Razorpay settlement reconciled",       region: "BLR-01", status: STATUSES[4], progress: 99, elapsed: "4m 01s", key: 5 },
+  { id: "A1B2C3", name: "kiosk-downtown",    task: "Card payment confirmed · $48",         region: "US-EAST", status: STATUSES[0], progress: 42, elapsed: "0m 12s", key: 0 },
+  { id: "D4E5F6", name: "pos-sync",          task: "Syncing POS menu - 142 items",         region: "EU-WEST", status: STATUSES[0], progress: 67, elapsed: "1m 48s", key: 1 },
+  { id: "G7H8I9", name: "face-scan-01",      task: "Face scan check-in · Priya S.",        region: "APAC",    status: STATUSES[3], progress: 18, elapsed: "0m 05s", key: 2 },
+  { id: "J0K1L2", name: "payroll-engine",    task: "Running payroll formulas · Branch 3",  region: "UK-01",   status: STATUSES[0], progress: 55, elapsed: "5m 30s", key: 3 },
+  { id: "M3N4O5", name: "hrms-hq",           task: "US tax withholdings applied",          region: "UAE-01",  status: STATUSES[0], progress: 80, elapsed: "2m 22s", key: 4 },
+  { id: "P6Q7R8", name: "payments-live",     task: "Settlement reconciled",                region: "US-EAST", status: STATUSES[4], progress: 99, elapsed: "4m 01s", key: 5 },
 ]
 
 export function LiveAgentFeed() {

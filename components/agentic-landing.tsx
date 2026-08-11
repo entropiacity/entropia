@@ -1,14 +1,13 @@
 "use client"
 
-import React, { useRef, useEffect, useState, useCallback } from "react"
+import React, { useRef, useEffect, useState } from "react"
 import Link from "next/link"
-import { IntroAnimation, HERO_REVEAL_MS } from "@/components/intro-animation"
 import { PixelIcon } from "@/components/pixel-icon"
 import { LiveAgentFeed, LiveAgentCounter } from "@/components/live-agent-feed"
 import { RevealText } from "@/components/reveal-text"
 import { StackingAgentCards } from "@/components/stacking-agent-cards"
-import { MobileNav } from "@/components/mobile-nav"
 import { DevExSection } from "@/components/devex-section"
+import HeroSection from "@/components/hero-section"
 import { BOOK_DEMO_URL } from "@/app/lib/links"
 
 // ─── Intersection Observer hook ──────────────────────────────────────────────
@@ -56,20 +55,121 @@ function Tag({ children }: { children: React.ReactNode }) {
   )
 }
 
+const INTEGRATION_SLIDES = [
+  {
+    key: "kiosk",
+    img: "/kiosk.png",
+    alt: "Entropia Kiosk self-ordering and POS checkout",
+    tag: "KIOSK",
+    title: "Native POS sync",
+    desc: "Two-way menu sync. Modifiers mapped. Orders land in kitchen display with zero double entry.",
+    code: (
+      <>
+        <span className="text-black/25">{"// order → kitchen"}</span><br />
+        <span className="text-blue-600/70">kiosk</span>.place(order)<br />
+        {"  "}→ <span className="text-amber-700/70">pos</span>.sync()<br />
+        {"  "}→ <span className="text-green-700/70">pay</span>.checkout()
+      </>
+    ),
+    liveLabel: "PAYMENTS LIVE",
+    liveDesc: "Cards, UPI, wallets - built into checkout. Instant confirmation, fewer counter interruptions.",
+  },
+  {
+    key: "hrms",
+    img: "/hrms.png",
+    alt: "Entropia HRMS face scan attendance and payroll",
+    tag: "HRMS",
+    title: "Face scan to payroll",
+    desc: "Attendance marks itself. Salary formulas run live. Tax packs apply the right rules for 45+ countries.",
+    code: (
+      <>
+        <span className="text-black/25">{"// check-in → payroll"}</span><br />
+        <span className="text-blue-600/70">face</span>.scan(staff)<br />
+        {"  "}→ <span className="text-amber-700/70">attendance</span>.mark()<br />
+        {"  "}→ <span className="text-green-700/70">tax</span>.apply(country)
+      </>
+    ),
+    liveLabel: "PAYROLL LIVE",
+    liveDesc: "Withholding, social security, and statutory filings - one dashboard for every branch.",
+  },
+] as const
+
+function IntegrationsShowcase({ onMouseMove }: { onMouseMove: (e: React.MouseEvent<HTMLDivElement>) => void }) {
+  const [index, setIndex] = useState(0)
+  const [visible, setVisible] = useState(true)
+
+  useEffect(() => {
+    const t = setInterval(() => {
+      setVisible(false)
+      window.setTimeout(() => {
+        setIndex((prev) => (prev + 1) % INTEGRATION_SLIDES.length)
+        setVisible(true)
+      }, 220)
+    }, 5000)
+    return () => clearInterval(t)
+  }, [])
+
+  const slide = INTEGRATION_SLIDES[index]
+
+  return (
+    <div className="rounded-2xl overflow-hidden border border-black/[0.07] flex flex-col md:block md:relative" onMouseMove={onMouseMove}>
+      <div className="relative w-full h-[280px] md:h-[480px] shrink-0">
+        {INTEGRATION_SLIDES.map((item) => (
+          <img
+            key={item.key}
+            src={item.img}
+            alt={item.alt}
+            className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-500"
+            style={{ opacity: item.key === slide.key && visible ? 1 : 0 }}
+          />
+        ))}
+      </div>
+
+      <div
+        className="flex flex-col gap-3 p-4 md:absolute md:bottom-4 md:right-4 md:p-0 md:w-72"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "translateY(0)" : "translateY(8px)",
+          transition: "opacity 220ms ease, transform 220ms ease",
+        }}
+      >
+        <div
+          className="rounded-xl border border-white/50 p-6"
+          style={{
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+            background: "rgba(255,255,255,0.60)",
+          }}
+        >
+          <Tag>{slide.tag}</Tag>
+          <h3 className="mt-3 text-lg font-light mb-2">{slide.title}</h3>
+          <p className="text-xs text-black/45 leading-relaxed mb-4">{slide.desc}</p>
+          <div className="bg-black/[0.05] rounded-lg border border-black/[0.07] p-3 font-mono text-[11px] text-black/50 leading-relaxed">
+            {slide.code}
+          </div>
+        </div>
+
+        <div
+          className="rounded-xl border border-white/50 p-6"
+          style={{
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+            background: "rgba(255,255,255,0.60)",
+          }}
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-2 h-2 rounded-full bg-emerald-500/80 animate-pulse" />
+            <span className="text-xs text-black/40 tracking-widest">{slide.liveLabel}</span>
+          </div>
+          <p className="text-sm text-black/45">{slide.liveDesc}</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function AgenticPage() {
-  const [heroReady, setHeroReady] = useState(false)
-  const [videoReady, setVideoReady] = useState(false)
-  const handleIntroDone = useCallback(() => {
-    setHeroReady(true)
-  }, [])
-
-  // Start video zoom slightly before hero content reveals, for seamless overlap
-  useEffect(() => {
-    const t = setTimeout(() => setVideoReady(true), HERO_REVEAL_MS)
-    return () => clearTimeout(t)
-  }, [])
-
   const handleMouse = (e: React.MouseEvent<HTMLDivElement>) => {
     const el = e.currentTarget
     const rect = el.getBoundingClientRect()
@@ -80,80 +180,8 @@ export default function AgenticPage() {
   return (
     <div className="bg-[#F5F4F0] text-[#111] min-h-screen font-sans antialiased">
 
-      {/* ── INTRO ANIMATION ───────────────────────────────────────────────── */}
-      <IntroAnimation onDone={handleIntroDone} />
-
-      {/* ── STICKY NAV ────────────────────────────────────────────────────── */}
-      <MobileNav />
-
-      {/* ── HERO ──────────────────────────────────────────────────────────── */}
-      <section className="relative h-screen overflow-hidden">
-
-        {/* Video background — zooms in once intro is done */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover z-0"
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/agentic-hero-9yW3wnTNMfn2U6lsVhTTZSJFEvAoSj.mp4"
-          style={{
-            transform: videoReady ? "scale(1.05)" : "scale(0.85)",
-            transition: "transform 2s cubic-bezier(0.16, 1, 0.3, 1)",
-          }}
-        />
-
-
-
-        {/* Progressive blur + light gradient rising from bottom */}
-        <div className="absolute inset-x-0 bottom-0 z-10 pointer-events-none" style={{ height: "65%", background: "linear-gradient(to top, #F5F4F0 0%, #F5F4F0 18%, rgba(245,244,240,0.85) 35%, rgba(245,244,240,0.5) 55%, rgba(245,244,240,0.15) 75%, transparent 100%)" }} />
-        {/* Backdrop blur layers — progressively lighter toward top */}
-        <div className="absolute inset-x-0 bottom-0 z-10 pointer-events-none" style={{ height: "20%", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", maskImage: "linear-gradient(to top, black 0%, transparent 100%)", WebkitMaskImage: "linear-gradient(to top, black 0%, transparent 100%)" }} />
-        <div className="absolute inset-x-0 bottom-0 z-10 pointer-events-none" style={{ height: "38%", backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)", maskImage: "linear-gradient(to top, black 0%, transparent 100%)", WebkitMaskImage: "linear-gradient(to top, black 0%, transparent 100%)" }} />
-        <div className="absolute inset-x-0 bottom-0 z-10 pointer-events-none" style={{ height: "55%", backdropFilter: "blur(2px)", WebkitBackdropFilter: "blur(2px)", maskImage: "linear-gradient(to top, black 0%, transparent 100%)", WebkitMaskImage: "linear-gradient(to top, black 0%, transparent 100%)" }} />
-
-        {/* Spacer so hero content doesn't sit under the fixed nav */}
-        <div className="h-20" />
-
-        {/* Title + metrics — anchored to bottom left */}
-        <div className="absolute inset-x-0 bottom-0 z-30 flex flex-col px-6 md:px-12 pb-12 max-w-3xl">
-          {/* Title */}
-          <h1
-            className="text-6xl sm:text-7xl md:text-8xl font-light text-[#111] leading-[1.0] tracking-tight mb-10"
-            style={{
-              fontFamily: '"IBM Plex Sans", sans-serif',
-              opacity: heroReady ? 1 : 0,
-              filter: heroReady ? "blur(0px)" : "blur(24px)",
-              transform: heroReady ? "translateY(0px)" : "translateY(32px)",
-              transition: "opacity 1s cubic-bezier(0.16,1,0.3,1) 0ms, filter 1s cubic-bezier(0.16,1,0.3,1) 0ms, transform 1s cubic-bezier(0.16,1,0.3,1) 0ms",
-            }}
-          >
-            Software built<br />to replace<br />the giants.
-          </h1>
-
-          {/* 3 metrics — staggered after title */}
-          <div className="flex gap-8 sm:gap-12">
-            {[
-              { value: "70%", label: "Cost cut" },
-              { value: "3–5d", label: "To go live" },
-              { value: "2", label: "Products" },
-            ].map((stat, i) => (
-              <div
-                key={i}
-                style={{
-                  opacity: heroReady ? 1 : 0,
-                  filter: heroReady ? "blur(0px)" : "blur(16px)",
-                  transform: heroReady ? "translateY(0px)" : "translateY(20px)",
-                  transition: `opacity 0.8s cubic-bezier(0.16,1,0.3,1) ${120 + i * 80}ms, filter 0.8s cubic-bezier(0.16,1,0.3,1) ${120 + i * 80}ms, transform 0.8s cubic-bezier(0.16,1,0.3,1) ${120 + i * 80}ms`,
-                }}
-              >
-                <div className="text-3xl sm:text-4xl text-[#111] font-light tracking-tight" style={{ fontFamily: '"IBM Plex Sans", sans-serif' }}>{stat.value}</div>
-                <div className="text-xs text-black/40 tracking-widest uppercase mt-1" style={{ fontFamily: '"IBM Plex Sans", sans-serif' }}>{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ── HERO (shader) ─────────────────────────────────────────────────── */}
+      <HeroSection />
 
       {/* ── PLATFORM OVERVIEW (bento) ──────────────────────────────────────── */}
       <section id="platform" className="py-32 px-6 md:px-12 lg:px-20">
@@ -167,9 +195,9 @@ export default function AgenticPage() {
           </div>
 
           <div className="grid grid-cols-12 grid-rows-auto gap-3" onMouseMove={handleMouse}>
-            {/* Big left card — full width now that multi-agent is removed */}
+            {/* Big left card - full width now that multi-agent is removed */}
             <BentoCard className="col-span-12 p-8 min-h-[200px] flex flex-col justify-between relative overflow-hidden" delay={0}>
-              {/* Arc background image — always fills container, objects pushed to bottom third */}
+              {/* Arc background image - always fills container, objects pushed to bottom third */}
               <img
                 src="/kiosk.png"
                 alt=""
@@ -177,14 +205,14 @@ export default function AgenticPage() {
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{ objectPosition: "center 40%" }}
               />
-              {/* Progressive blur layer — blurs from 45% downward */}
+              {/* Progressive blur layer - blurs from 45% downward */}
               <div className="absolute inset-0" style={{
                 maskImage: "linear-gradient(to bottom, transparent 45%, black 100%)",
                 WebkitMaskImage: "linear-gradient(to bottom, transparent 45%, black 100%)",
                 backdropFilter: "blur(16px)",
                 WebkitBackdropFilter: "blur(16px)",
               }} />
-              {/* Fade-to-background gradient — matches site bg color #f5f4f0 */}
+              {/* Fade-to-background gradient - matches site bg color #f5f4f0 */}
               <div
                 className="absolute inset-0"
                 style={{
@@ -198,7 +226,7 @@ export default function AgenticPage() {
                 </div>
                 <h3 className="text-xl font-light mb-3">Kiosk System</h3>
                 <p className="text-sm text-black/45 leading-relaxed max-w-sm">
-                  Self-ordering that cuts counter wait. Native PetPooja sync. Razorpay at checkout. Live in days — not months of enterprise theater.
+                  Self-ordering that cuts counter wait. Native PetPooja sync. Razorpay at checkout. Live in days - not months of enterprise theater.
                 </p>
               </div>
             </BentoCard>
@@ -217,15 +245,15 @@ export default function AgenticPage() {
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 10h8M8 14h5"/></svg>
               </div>
               <h3 className="text-lg font-light mb-2">One-Click Payroll</h3>
-              <p className="text-sm text-black/45 leading-relaxed">Live salary formulas on real check-ins. EPF, ESIC &amp; TDS filed without spreadsheet hell.</p>
+              <p className="text-sm text-black/45 leading-relaxed">Live salary formulas on real check-ins. Tax and statutory compliance built for 45+ countries.</p>
             </BentoCard>
 
             <BentoCard className="col-span-12 md:col-span-4 p-8 min-h-[200px]" delay={200}>
               <div className="w-10 h-10 rounded-xl border border-black/10 flex items-center justify-center mb-5">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
               </div>
-              <h3 className="text-lg font-light mb-2">60–80% Cheaper</h3>
-              <p className="text-sm text-black/45 leading-relaxed">Replace UEngage &amp; PagarBook. Same outcomes. Fraction of the bill. Zero hidden fees.</p>
+              <h3 className="text-lg font-light mb-2">60-80% Cheaper</h3>
+              <p className="text-sm text-black/45 leading-relaxed">Replace bloated legacy stacks. Same outcomes. Fraction of the bill. Zero hidden fees.</p>
             </BentoCard>
           </div>
         </div>
@@ -243,7 +271,7 @@ export default function AgenticPage() {
               </RevealText>
             </div>
             <p className="text-sm text-black/45 leading-relaxed max-w-xs">
-              Old software is bleeding your business dry. Entropia is faster, leaner, and cheaper — without the enterprise bloat.
+              Old software is bleeding your business dry. Entropia is faster, leaner, and cheaper - without the enterprise bloat.
             </p>
           </div>
 
@@ -264,13 +292,13 @@ export default function AgenticPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3" onMouseMove={handleMouse}>
             {[
-              { n: "01", title: "Book a demo",  desc: "See Entropia live in 15 minutes. No sales pitch — a real walkthrough of kiosk or HRMS.", delay: 0,   img: "/kiosk.png" },
-              { n: "02", title: "Free migrate", desc: "We import menus, employees, and history from UEngage, PagarBook, or any legacy stack. Zero downtime.", delay: 80,  img: "/hrms.png" },
+              { n: "01", title: "Book a demo",  desc: "See Entropia live in 15 minutes. No sales pitch - a real walkthrough of kiosk or HRMS.", delay: 0,   img: "/kiosk.png" },
+              { n: "02", title: "Free migrate", desc: "We import menus, employees, and history from your legacy stack. Zero downtime.", delay: 80,  img: "/hrms.png" },
               { n: "03", title: "Train",        desc: "Onboarding and floor training included. Your team runs the product the same week.", delay: 140, img: "/kiosk.png" },
               { n: "04", title: "Go live",      desc: "Cut costs up to 70% from day one. We stay on for setup, support, and the first payroll/order rush.", delay: 200, img: "/hrms.png" },
             ].map((step) => (
               <BentoCard key={step.n} className="relative overflow-hidden flex flex-col min-h-[320px]" delay={step.delay}>
-                {/* Image at top — mask fades it out strongly before the bottom edge */}
+                {/* Image at top - mask fades it out strongly before the bottom edge */}
                 <div className="absolute inset-x-0 top-0 h-56 pointer-events-none">
                   <img
                     src={step.img}
@@ -309,59 +337,11 @@ export default function AgenticPage() {
               </RevealText>
             </div>
             <p className="text-sm text-black/45 leading-relaxed max-w-xs">
-              PetPooja-native kiosk. Razorpay at checkout. Face scan to payroll. Built for Indian restaurants and multi-branch teams.
+              PetPooja-native kiosk. Cards and UPI at checkout. Face scan to payroll. Built for multi-location teams worldwide.
             </p>
           </div>
 
-          {/* Full-width image block with glass cards */}
-          {/* Mobile: flex-col, image + cards stacked. Desktop: image fills block, cards absolute */}
-          <div className="rounded-2xl overflow-hidden border border-black/[0.07] flex flex-col md:block md:relative" onMouseMove={handleMouse}>
-            {/* Image */}
-            <div className="relative w-full h-[280px] md:h-[480px] shrink-0">
-              <img
-                src="/hrms.png"
-                alt="Entropia HRMS and kiosk operations"
-                className="absolute inset-0 w-full h-full object-cover object-center"
-              />
-            </div>
-
-            {/* Cards — flex row on mobile (equal spacing), absolute on desktop */}
-            <div className="flex flex-col gap-3 p-4 md:absolute md:bottom-4 md:right-4 md:p-0 md:w-72">
-              <div
-                className="rounded-xl border border-white/50 p-6"
-                style={{
-                  backdropFilter: "blur(24px)",
-                  WebkitBackdropFilter: "blur(24px)",
-                  background: "rgba(255,255,255,0.60)",
-                }}
-              >
-                <Tag>PETPOOJA</Tag>
-                <h3 className="mt-3 text-lg font-light mb-2">Native POS sync</h3>
-                <p className="text-xs text-black/45 leading-relaxed mb-4">Two-way menu sync. Modifiers mapped. Orders land in kitchen display with zero double entry.</p>
-                <div className="bg-black/[0.05] rounded-lg border border-black/[0.07] p-3 font-mono text-[11px] text-black/50 leading-relaxed">
-                  <span className="text-black/25">// order → kitchen</span><br />
-                  <span className="text-blue-600/70">kiosk</span>.place(order)<br />
-                  {"  "}→ <span className="text-amber-700/70">petpooja</span>.sync()<br />
-                  {"  "}→ <span className="text-green-700/70">razorpay</span>.upi()
-                </div>
-              </div>
-
-              <div
-                className="rounded-xl border border-white/50 p-6"
-                style={{
-                  backdropFilter: "blur(24px)",
-                  WebkitBackdropFilter: "blur(24px)",
-                  background: "rgba(255,255,255,0.60)",
-                }}
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500/80 animate-pulse" />
-                  <span className="text-xs text-black/40 tracking-widest">RAZORPAY LIVE</span>
-                </div>
-                <p className="text-sm text-black/45">UPI, cards, wallets — built into checkout. Instant confirmation, fewer counter interruptions.</p>
-              </div>
-            </div>
-          </div>
+          <IntegrationsShowcase onMouseMove={handleMouse} />
         </div>
       </section>
 
@@ -372,23 +352,23 @@ export default function AgenticPage() {
             <PixelIcon type="platform" size={40} />
             <div className="mt-4"><Tag>COMPLIANCE</Tag></div>
             <RevealText className="mt-5 text-4xl md:text-5xl font-light tracking-tight leading-[1.05]">
-              {"Statutory done.\nSpreadsheets gone."}
+              {"Tax compliance\nacross 45+ countries."}
             </RevealText>
           </div>
 
           {/* Asymmetric grid: left text + title, right interactive audit log */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Left side — descriptions */}
+            {/* Left side - descriptions */}
             <div className="space-y-6">
               <p className="text-sm text-black/45 leading-relaxed">
-                Face scan attendance feeds live salary formulas. EPF, ESIC, and TDS run automatically — built for Indian payroll, not bolted on later.
+                Face scan attendance feeds live salary formulas. Withholding, social security, and statutory filings run automatically, tuned to local tax rules in 45+ countries, not bolted on later.
               </p>
 
               <div className="space-y-4">
                 {[
-                  { label: "EPF & ESIC auto-file", desc: "Statutory contributions without the monthly scramble" },
-                  { label: "TDS without the mess", desc: "Quarterly drafts ready from real attendance data" },
-                  { label: "Multi-branch command", desc: "Every outlet live on one dashboard" },
+                  { label: "Local tax engines", desc: "Income tax, social contributions, and withholdings per country" },
+                  { label: "Statutory auto-file", desc: "Payroll filings that match each jurisdiction's rules" },
+                  { label: "Multi-country teams", desc: "One dashboard for every branch, every region" },
                 ].map((item) => (
                   <div key={item.label} className="flex gap-4">
                     <div className="w-1 bg-black/10 rounded-full shrink-0" />
@@ -400,9 +380,9 @@ export default function AgenticPage() {
                 ))}
               </div>
 
-              {/* Compliance badges — vertical stack */}
+              {/* Compliance badges - vertical stack */}
               <div className="pt-4 flex flex-col gap-2">
-                {["Face scan attendance", "Custom salary formulas", "One-click payroll", "PagarBook replacement"].map((badge) => (
+                {["Face scan attendance", "Custom salary formulas", "One-click payroll", "45+ country tax packs"].map((badge) => (
                   <div key={badge} className="flex items-center gap-2 text-xs text-black/25">
                     <span className="w-1 h-1 rounded-full bg-black/25" />
                     {badge}
@@ -411,7 +391,7 @@ export default function AgenticPage() {
               </div>
             </div>
 
-            {/* Right side — live audit log visualization */}
+            {/* Right side - live audit log visualization */}
             <BentoCard className="p-6 lg:row-span-1" delay={0}>
               <div className="text-xs text-black/30 tracking-widest uppercase mb-4">Live Ops Trail</div>
               <div className="space-y-2">
@@ -419,8 +399,8 @@ export default function AgenticPage() {
                   { time: "12:34:21", action: "face_scan_checkin", status: "success" },
                   { time: "12:34:18", action: "attendance_marked", status: "success" },
                   { time: "12:34:15", action: "payroll_formula_run", status: "success" },
-                  { time: "12:34:12", action: "epf_batch_queued", status: "success" },
-                  { time: "12:34:09", action: "branch_sync_ok", status: "success" },
+                  { time: "12:34:12", action: "tax_pack_us_applied", status: "success" },
+                  { time: "12:34:09", action: "statutory_batch_ok", status: "success" },
                 ].map((log, i) => (
                   <div
                     key={i}
@@ -454,7 +434,7 @@ export default function AgenticPage() {
         <div className="flex border-b border-black/[0.06]" style={{ animation: "marqueeLeft 28s linear infinite" }}>
           {[...Array(3)].map((_, rep) => (
             <div key={rep} className="flex shrink-0">
-              {["Self-Ordering", "PetPooja Sync", "UPI Checkout", "Face Scan", "One-Click Payroll", "EPF Filing", "ESIC Auto", "Multi-Branch", "Kitchen Tickets", "Live Analytics"].map((cap) => (
+              {["Self-Ordering", "POS Sync", "Card & UPI Checkout", "Face Scan", "One-Click Payroll", "Tax Packs", "45+ Countries", "Multi-Branch", "Kitchen Tickets", "Live Analytics"].map((cap) => (
                 <div key={cap} className="flex items-center gap-6 px-10 py-5 border-r border-black/[0.06] shrink-0">
                   <span className="w-1.5 h-1.5 rounded-full bg-black/20 shrink-0" />
                   <span className="text-sm text-black/45 whitespace-nowrap tracking-wide">{cap}</span>
@@ -466,7 +446,7 @@ export default function AgenticPage() {
         <div className="flex" style={{ animation: "marqueeRight 22s linear infinite" }}>
           {[...Array(3)].map((_, rep) => (
             <div key={rep} className="flex shrink-0">
-              {["Replace UEngage", "Replace PagarBook", "Custom Branding", "Razorpay", "Salary Formulas", "TDS Ready", "Rush-Hour Insights", "Multi-Terminal", "Free Migration", "Go Live Fast"].map((cap) => (
+              {["Replace Legacy Stacks", "Custom Branding", "Global Payroll", "Salary Formulas", "Withholding Tax", "Rush-Hour Insights", "Multi-Terminal", "Free Migration", "Go Live Fast", "Statutory Filing"].map((cap) => (
                 <div key={cap} className="flex items-center gap-6 px-10 py-5 border-r border-black/[0.06] shrink-0">
                   <span className="w-1.5 h-1.5 rounded-full bg-black/12 shrink-0" />
                   <span className="text-sm text-black/30 whitespace-nowrap tracking-wide">{cap}</span>
@@ -485,10 +465,10 @@ export default function AgenticPage() {
               <PixelIcon type="agents" size={40} />
               <div className="mt-4"><Tag>LIVE RIGHT NOW</Tag></div>
               <RevealText className="mt-5 text-4xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.05]">
-                {"Orders, check-ins,\npayroll — running."}
+                {"Orders, check-ins,\npayroll - running."}
               </RevealText>
               <p className="mt-6 text-base text-black/40 leading-relaxed max-w-sm">
-                Across outlets and branches, Entropia keeps counters moving and attendance honest — without the software tax of the giants.
+                Across outlets and branches, Entropia keeps counters moving and attendance honest - without the software tax of the giants.
               </p>
               <div className="mt-10 flex items-end gap-2">
                 <LiveAgentCounter />
@@ -517,20 +497,20 @@ export default function AgenticPage() {
             {[
               {
                 name: "Kiosk",
-                price: "₹99,999",
+                price: "$999",
                 period: "",
                 sub: "One-time license · own it",
-                features: ["PetPooja POS integration", "Unlimited menu items", "UPI & card payments", "Custom branding & UI", "Multi-terminal support", "Free onboarding"],
+                features: ["POS integrations", "Unlimited menu items", "Card & UPI payments", "Custom branding & UI", "Multi-terminal support", "Free onboarding"],
                 delay: 0,
                 href: "/kiosk",
                 cta: "VIEW KIOSK",
               },
               {
                 name: "HRMS",
-                price: "₹34,999",
+                price: "$499",
                 period: "",
                 sub: "One-time license · own it",
-                features: ["Face scan attendance", "Custom salary formulas", "One-click payroll", "EPF, ESIC & TDS auto", "Multi-branch dashboard", "Free migration"],
+                features: ["Face scan attendance", "Custom salary formulas", "One-click payroll", "Tax packs for 45+ countries", "Multi-branch dashboard", "Free migration"],
                 highlight: true,
                 delay: 80,
                 href: "/hrms",
@@ -586,7 +566,7 @@ export default function AgenticPage() {
 
       {/* ── CTA ───────────────────────────────────────────────────────────── */}
       <section className="relative py-32 px-6 md:px-12 lg:px-20 border-t border-black/[0.06] overflow-hidden">
-        {/* Glass panels image — anchored to bottom center */}
+        {/* Glass panels image - anchored to bottom center */}
         <img
           src="/images/footer.png"
           alt=""
@@ -594,7 +574,7 @@ export default function AgenticPage() {
           className="absolute bottom-0 left-0 w-full object-cover object-bottom pointer-events-none select-none"
           style={{ opacity: 0.85 }}
         />
-        {/* Progressive blur from bottom — blends into site bg */}
+        {/* Progressive blur from bottom - blends into site bg */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -616,7 +596,7 @@ export default function AgenticPage() {
             Ready to switch?<br />Book a free demo.
           </h2>
           <p className="text-sm text-black/45 leading-relaxed mb-10">
-            Kill the old. See Entropia Kiosk or HRMS on your real use case in 15 minutes — zero sales pressure.
+            Kill the old. See Entropia Kiosk or HRMS on your real use case in 15 minutes - zero sales pressure.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
             <Link
@@ -626,10 +606,10 @@ export default function AgenticPage() {
               GET A FREE DEMO
             </Link>
             <a
-              href="mailto:hello@entropia.in"
+              href="mailto:hello@entropiacity.com"
               className="px-8 py-3 border border-black/10 text-black/60 text-sm rounded-xl hover:border-black/25 hover:text-black hover:bg-black/[0.04] transition-colors tracking-widest"
             >
-              hello@entropia.in
+              hello@entropiacity.com
             </a>
           </div>
         </div>

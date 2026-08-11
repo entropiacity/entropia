@@ -22,13 +22,13 @@ const STEPS = [
   {
     num: "02",
     title: "Free migration",
-    desc: "We move you off UEngage / PagarBook",
+    desc: "We migrate your menus, staff, and payroll history",
     file: "migration-plan",
     lang: "typescript",
     code: [
       { type: "comment", text: "// We handle the boring part" },
       { type: "keyword", text: "const", after: " migration ", keyword2: "=", keyword3: " ", fn: "importFrom", args: "({" },
-      { type: "prop", key: "  source", val: "'UEngage' | 'PagarBook'" },
+      { type: "prop", key: "  source", val: "'legacy_stack'" },
       { type: "prop", key: "  menus", val: "true" },
       { type: "prop", key: "  employees", val: "true" },
       { type: "prop", key: "  history", val: "true" },
@@ -64,10 +64,10 @@ const STEPS = [
       { type: "comment", text: "# Flip the switch" },
       { type: "command", text: "entropia go-live --locations all" },
       { type: "gap" },
-      { type: "output", text: "  Orders flowing to PetPooja…" },
+      { type: "output", text: "  Orders flowing to POS…" },
       { type: "output", text: "  Attendance marking itself…" },
       { type: "gap" },
-      { type: "success", text: "✓ Live — typically 60–80% cheaper" },
+      { type: "success", text: "✓ Live - typically 60-80% cheaper" },
       { type: "url", text: "  → https://entropiacity.com/book" },
     ],
   },
@@ -148,7 +148,7 @@ export function DevExSection() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 items-stretch">
-          {/* Left — 4 clickable step cards, equal height, no flex stretch */}
+          {/* Left - 4 clickable step cards, equal height, no flex stretch */}
           <div className="flex flex-col gap-3">
             {STEPS.map((s, i) => (
               <button
@@ -187,7 +187,7 @@ export function DevExSection() {
             ))}
           </div>
 
-          {/* Right — fixed-size code panel */}
+          {/* Right - fixed-size code panel */}
           <div
             className="lg:col-span-2 rounded-2xl border border-black/[0.06] p-8 flex flex-col"
             style={{
@@ -222,7 +222,7 @@ export function DevExSection() {
               </div>
             </div>
 
-            {/* Code block — fixed height, content doesn't affect layout */}
+            {/* Code block - fixed height, content doesn't affect layout */}
             <div className="flex-1 rounded-xl p-6 overflow-hidden" style={{ background: "rgba(0,0,0,0.03)", border: "1px solid rgba(0,0,0,0.06)" }}>
               <div
                 className="font-mono text-[12px] leading-6"

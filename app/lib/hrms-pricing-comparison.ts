@@ -1,7 +1,7 @@
 export const MIN_EMPLOYEES = 10;
 export const MAX_EMPLOYEES = 500;
 export const EMPLOYEE_STEP = 5;
-export const ENTROPIA_LIFETIME_INR = 34_999;
+export const ENTROPIA_LIFETIME_USD = 499;
 
 export type PricingResult = {
   monthly: number;
@@ -26,8 +26,8 @@ export function clampEmployees(value: number): number {
 
 export function entropiaPricing(): PricingResult {
   return {
-    monthly: ENTROPIA_LIFETIME_INR / 12,
-    annual: ENTROPIA_LIFETIME_INR,
+    monthly: ENTROPIA_LIFETIME_USD / 12,
+    annual: ENTROPIA_LIFETIME_USD,
     oneTime: true,
   };
 }
@@ -107,7 +107,7 @@ export const HRMS_COMPETITORS: CompetitorRow[] = [
 ];
 
 export function formatInr(value: number, fractionDigits = 0): string {
-  return `₹${value.toLocaleString("en-IN", {
+  return `$${value.toLocaleString("en-US", {
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits,
   })}`;
@@ -122,10 +122,10 @@ export function computeComparison(employees: number) {
     const annualSavings = pricing.annual - baseline.annual;
     const oneYearSavings = row.isEntropia
       ? 0
-      : pricing.annual - ENTROPIA_LIFETIME_INR;
+      : pricing.annual - ENTROPIA_LIFETIME_USD;
     const fiveYearSavings = row.isEntropia
       ? 0
-      : pricing.annual * 5 - ENTROPIA_LIFETIME_INR;
+      : pricing.annual * 5 - ENTROPIA_LIFETIME_USD;
 
     return {
       ...row,
