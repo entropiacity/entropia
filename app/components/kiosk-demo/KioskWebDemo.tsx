@@ -253,3 +253,4 @@ export function KioskWebDemo({ className = '', autoFocusOnView = false }: KioskW
     </>
   );
 }
+
