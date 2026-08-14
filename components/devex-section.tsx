@@ -102,7 +102,6 @@ function CodeLine({ line }: { line: (typeof STEPS)[0]["code"][0] }) {
       {line.keyword3 && <span className="text-[#7c3aed]">{line.keyword3}</span>}
       {line.fn && <span className="text-[#b45309]">{line.fn}</span>}
       {line.args && <span className="text-[#111]">{line.args}</span>}
-      {line.string && <span className="text-[#16a34a]">{line.string}</span>}
     </div>
   )
   return null
