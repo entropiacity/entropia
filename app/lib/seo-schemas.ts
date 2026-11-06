@@ -1,4 +1,5 @@
-import { SITE_FAQS } from "./faq-data";
+import { BLOG_POSTS, type BlogPost } from "./blog-data";
+import { ALL_FAQS, SITE_FAQS, type FaqItem } from "./faq-data";
 import {
   SITE_COUNTRY,
   SITE_EMAIL,
@@ -103,18 +104,70 @@ function breadcrumbSchema(items: { name: string; path: string }[]): JsonLd {
   };
 }
 
-function faqPageSchema(): JsonLd {
+function faqEntities(faqs: readonly FaqItem[]) {
+  return faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
+    },
+  }));
+}
+
+function faqPageSchema(faqs: readonly FaqItem[] = SITE_FAQS, path = "/"): JsonLd {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "@id": `${absoluteUrl("/")}#faq`,
-    mainEntity: SITE_FAQS.map((faq) => ({
-      "@type": "Question",
-      name: faq.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: faq.answer,
-      },
+    "@id": `${absoluteUrl(path)}#faq`,
+    url: absoluteUrl(path),
+    mainEntity: faqEntities(faqs),
+  };
+}
+
+function blogPostingSchema(post: BlogPost): JsonLd {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": `${absoluteUrl(`/blog/${post.slug}`)}#article`,
+    headline: post.title,
+    description: post.description,
+    image: assetUrl(post.ogImage),
+    datePublished: post.date,
+    dateModified: post.updated,
+    author: {
+      "@type": "Organization",
+      name: SITE_LEGAL_NAME,
+      url: absoluteUrl("/"),
+    },
+    publisher: {
+      "@id": `${absoluteUrl("/")}#organization`,
+    },
+    mainEntityOfPage: absoluteUrl(`/blog/${post.slug}`),
+    keywords: post.keywords.join(", "),
+    articleSection: post.category,
+    inLanguage: "en-IN",
+  };
+}
+
+function blogListSchema(): JsonLd {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": `${absoluteUrl("/blog")}#blog`,
+    name: "Entropia Blog",
+    url: absoluteUrl("/blog"),
+    description:
+      "Guides on restaurant kiosk software, HRMS, PetPooja integration, and Indian payroll compliance.",
+    publisher: {
+      "@id": `${absoluteUrl("/")}#organization`,
+    },
+    blogPost: BLOG_POSTS.map((post) => ({
+      "@type": "BlogPosting",
+      headline: post.title,
+      url: absoluteUrl(`/blog/${post.slug}`),
+      datePublished: post.date,
+      dateModified: post.updated,
     })),
   };
 }
@@ -287,5 +340,47 @@ export function bookPageSchemas(): JsonLd[] {
       name: "Book a Demo",
       description: "Schedule a free Entropia product walkthrough.",
     }),
+  ];
+}
+
+export function faqRouteSchemas(): JsonLd[] {
+  return [
+    breadcrumbSchema([
+      { name: "Home", path: "/" },
+      { name: "FAQ", path: "/faq" },
+    ]),
+    webPageSchema({
+      path: "/faq",
+      name: "Entropia FAQ",
+      description:
+        "Frequently asked questions about Entropia Kiosk, HRMS, pricing, and migration.",
+    }),
+    faqPageSchema(ALL_FAQS, "/faq"),
+  ];
+}
+
+export function blogIndexSchemas(): JsonLd[] {
+  return [
+    breadcrumbSchema([
+      { name: "Home", path: "/" },
+      { name: "Blog", path: "/blog" },
+    ]),
+    webPageSchema({
+      path: "/blog",
+      name: "Entropia Blog",
+      description: "Insights on kiosk, HRMS, and restaurant technology in India.",
+    }),
+    blogListSchema(),
+  ];
+}
+
+export function blogPostSchemas(post: BlogPost): JsonLd[] {
+  return [
+    breadcrumbSchema([
+      { name: "Home", path: "/" },
+      { name: "Blog", path: "/blog" },
+      { name: post.title, path: `/blog/${post.slug}` },
+    ]),
+    blogPostingSchema(post),
   ];
 }

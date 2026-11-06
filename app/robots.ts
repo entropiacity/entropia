@@ -7,13 +7,21 @@ const AI_CRAWLERS = [
   "OAI-SearchBot",
   "ClaudeBot",
   "Claude-Web",
+  "anthropic-ai",
   "PerplexityBot",
   "Google-Extended",
   "Applebot-Extended",
   "Bytespider",
   "CCBot",
   "cohere-ai",
+  "meta-externalagent",
+  "FacebookBot",
+  "Diffbot",
+  "YouBot",
+  "Amazonbot",
 ] as const;
+
+const DISALLOW = ["/api/", "/_next/", "/thankyou"];
 
 export default function robots(): MetadataRoute.Robots {
   const sitemap = `${SITE_BASE_URL}/sitemap.xml`;
@@ -22,13 +30,13 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
+        allow: ["/", "/llms.txt", "/blog", "/faq", "/kiosk", "/hrms", "/book"],
+        disallow: DISALLOW,
       },
       ...AI_CRAWLERS.map((userAgent) => ({
         userAgent,
-        allow: "/",
-        disallow: ["/api/", "/_next/", "/thankyou"],
+        allow: ["/", "/llms.txt", "/blog", "/faq", "/kiosk", "/hrms", "/book"],
+        disallow: DISALLOW,
       })),
     ],
     sitemap,

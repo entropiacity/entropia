@@ -56,6 +56,8 @@ export const PUBLIC_ROUTES: readonly SitemapRoute[] = [
   { path: "/", changeFrequency: "weekly", priority: 1 },
   { path: "/kiosk", changeFrequency: "weekly", priority: 0.95 },
   { path: "/hrms", changeFrequency: "weekly", priority: 0.95 },
+  { path: "/faq", changeFrequency: "weekly", priority: 0.9 },
+  { path: "/blog", changeFrequency: "daily", priority: 0.9 },
   { path: "/book", changeFrequency: "monthly", priority: 0.85 },
 ] as const;
 
@@ -243,4 +245,35 @@ export const THANKYOU_METADATA = createPageMetadata({
   ogImage: "/kiosk.png",
   ogImageAlt: "Entropia kiosk demo thank you page",
   noIndex: true,
+});
+
+export const FAQ_METADATA = createPageMetadata({
+  title: "FAQ | Entropia Kiosk, HRMS, Pricing & Migration",
+  description:
+    "Answers on Entropia Kiosk, PetPooja integration, UEngage and PagarBook alternatives, face attendance, EPF ESIC TDS, pricing, migration timelines, and multi-location rollouts in India.",
+  path: "/faq",
+  keywords: [
+    "Entropia FAQ",
+    "UEngage alternative FAQ",
+    "PagarBook alternative FAQ",
+    "PetPooja kiosk questions",
+    "face attendance FAQ India",
+  ],
+  ogImage: "/logo.png",
+  ogImageAlt: "Entropia frequently asked questions",
+});
+
+export const BLOG_METADATA = createPageMetadata({
+  title: "Blog | Restaurant Kiosk & HRMS Insights from Entropia",
+  description:
+    "Guides on UEngage and PagarBook alternatives, PetPooja kiosk integration, face attendance, EPF ESIC TDS automation, QSR ROI, and migration playbooks for Indian businesses.",
+  path: "/blog",
+  keywords: [
+    "Entropia blog",
+    "restaurant software India blog",
+    "HRMS India guides",
+    "kiosk ROI India",
+  ],
+  ogImage: "/logo.png",
+  ogImageAlt: "Entropia blog on kiosk and HRMS software",
 });

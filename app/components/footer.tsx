@@ -185,11 +185,15 @@ export function Footer() {
                 </a>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {["Pricing", "Blog"].map((item) => (
-                  <a key={item} href={item === "Pricing" ? "/#pricing" : "#"} style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", textDecoration: "none", fontWeight: 400 }}>
-                    {item}
-                  </a>
-                ))}
+                <a href="/#pricing" style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", textDecoration: "none", fontWeight: 400 }}>
+                  Pricing
+                </a>
+                <a href="/blog" style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", textDecoration: "none", fontWeight: 400 }}>
+                  Blog
+                </a>
+                <a href="/faq" style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", textDecoration: "none", fontWeight: 400 }}>
+                  FAQ
+                </a>
               </div>
             </div>
           </div>
